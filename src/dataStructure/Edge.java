@@ -1,6 +1,8 @@
 package dataStructure;
 
-public class Edge implements edge_data {
+import java.io.Serializable;
+
+public class Edge implements edge_data,Serializable {
 
 	private node_data src;
 	private node_data dest;

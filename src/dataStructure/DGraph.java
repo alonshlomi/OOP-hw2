@@ -1,25 +1,24 @@
 package dataStructure;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 
-public class DGraph implements graph {
+public class DGraph implements graph,Serializable {
 
-	private int num_of_nodes, num_of_edges;
+	private int num_of_nodes, num_of_edges,mode_count;
 	private LinkedHashMap<Integer, node_data> nodes;
 	private LinkedHashMap<Integer, LinkedHashMap<Integer, edge_data>> edges;
 
-	public void print() {
-		
-		System.out.println(nodes.keySet());
-		for (int keySrc : this.edges.keySet()) {
-			String ans = "";
-			ans += "src:" + keySrc + "-";
-			ans += this.getE(keySrc).toString();
-			System.out.println(ans);
+	public String toString() {
+		String ans = "Nodes: "+getV()+"\n";
+		for (node_data node : getV()) {
+			if(node != null)
+			ans += getE(node.getKey())+",";
 		}
-		System.out.println("num_of_nodes: " + num_of_nodes + ",num_of_edges: " + num_of_edges);
+		ans+="\nnodesSize: "+nodeSize()+", edgeSize: "+edgeSize();
+		return ans;
 	}
 
 	public DGraph(int num) {
@@ -35,6 +34,7 @@ public class DGraph implements graph {
 		edges = new LinkedHashMap<Integer, LinkedHashMap<Integer, edge_data>>();
 		num_of_edges = 0;
 		num_of_nodes = 0;
+		mode_count = 0;
 	}
 	
 
@@ -52,6 +52,7 @@ public class DGraph implements graph {
 	public void addNode(node_data n) {
 		nodes.put(n.getKey(), n);
 		num_of_nodes++;
+		mode_count++;
 	}
 
 	@Override
@@ -68,6 +69,7 @@ public class DGraph implements graph {
 		tmp_edge.put(dest, edge);
 		edges.put(src, tmp_edge);
 		num_of_edges++;
+		mode_count++;
 	}
 
 	@Override
@@ -100,6 +102,7 @@ public class DGraph implements graph {
 
 		if (nodes.get(key) != null)
 			num_of_nodes--;
+		mode_count++;
 		return nodes.remove(key);
 	}
 
@@ -107,6 +110,7 @@ public class DGraph implements graph {
 	public edge_data removeEdge(int src, int dest) {
 		if (edges.get(src) != null && edges.get(src).get(dest) != null)
 			num_of_edges--;
+		mode_count++;
 		return edges.get(src).remove(dest);
 	}
 
@@ -122,7 +126,7 @@ public class DGraph implements graph {
 
 	@Override
 	public int getMC() {
-		return 0;
+		return mode_count;
 	}
 
 }

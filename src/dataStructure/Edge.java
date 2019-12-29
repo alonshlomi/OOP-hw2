@@ -15,6 +15,7 @@ public class Edge implements edge_data,Serializable {
 	}
 	
 	public Edge(node_data src,node_data dest,double weight) {
+		if(weight < 0) throw new RuntimeException("Weight need to be a positive number!");
 		this.src = src;
 		this.dest = dest;
 		this.weight = weight;

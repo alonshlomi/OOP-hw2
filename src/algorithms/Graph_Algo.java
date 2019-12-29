@@ -7,6 +7,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -29,7 +30,11 @@ import dataStructure.node_data;
 public class Graph_Algo implements graph_algorithms {
 
 	private graph g;
+	
+	public Graph_Algo() {
 
+	}
+	
 	@Override
 	public void init(graph g) {
 		this.g = g;
@@ -100,11 +105,11 @@ public class Graph_Algo implements graph_algorithms {
 	public double shortestPathDist(int src, int dest) {
 		PriorityQueue<node_data> Q = new PriorityQueue<node_data>(Node._Comp);
 		Collection<node_data> nodes = g.getV();
-		node_data s = g.getNode(src);
+//		node_data s = g.getNode(src);
 		node_data d = g.getNode(dest);
 
 		for (node_data node : nodes) {
-			node.setWeight(Double.MAX_VALUE);
+			node.setWeight(Double.POSITIVE_INFINITY);
 			if (node.getKey() == src)
 				node.setWeight(0);
 			node.setTag(-1);
@@ -112,7 +117,9 @@ public class Graph_Algo implements graph_algorithms {
 		}
 
 		// s.setWeight(0);
-
+		
+		if(d == null) return Double.POSITIVE_INFINITY;
+		
 		while (d.getTag() != 1) {
 			node_data u = Q.poll();
 			Collection<edge_data> u_edges = g.getE(u.getKey());
@@ -172,12 +179,15 @@ public class Graph_Algo implements graph_algorithms {
 
 	@Override
 	public List<node_data> TSP(List<Integer> targets) {
-		List<node_data> ans = new ArrayList<node_data>();
-		
-		for(int i=1; i<targets.size();i++) {
-			ans.addAll(shortestPath(targets.get(i-1),targets.get(i)));
+		ArrayList<node_data> ans = new ArrayList<node_data>();
+		for(int i = 1 ; i < targets.size() ; i++) {
+			int src = targets.get(i-1);
+			int dest = targets.get(i);
+			Collection<node_data> path = shortestPath(src, dest);
+			if(path == null) return null;
+			if(ans.size() > 0) ans.remove(ans.size()-1);
+			ans.addAll(path);
 		}
-		
 		return ans;
 	}
 

@@ -32,7 +32,11 @@ public class Node implements node_data,Serializable{
 	}
 	
 	public String toString() {
-		return "["+key+"("+info+"){"+tag+"}]";
+		String ans = "["+key;
+//		ans+= "("+info+")";
+//		ans+= "{"+tag+"}";
+		ans+="]";
+		return ans;
 	}
 	
 	public Node(Point3D l, int w, String i,int t) {

@@ -31,3 +31,13 @@ This class represents a graph as a User Interface, and allows run algorithms on 
 
 Example: 
 ![img](https://github.com/alonshlomi/OOP-hw2/blob/master/images/graph.png)
+
+##### Interfaces implemented and Comparator
+
+The interfaces implemented in this assignment: 
+* **node_data**
+* **edge_data**
+* **graph**
+* **graph_algorithms**
+
+**Node_Comparator**: Compare nodes' weight.

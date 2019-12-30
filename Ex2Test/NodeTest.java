@@ -12,9 +12,9 @@ class NodeTest {
 	
 	@BeforeAll
 	static void init() {
-		n0 = new Node();
-		n1 = new Node();
-		n2 = new Node();
+		n0 = new Node(0);
+		n1 = new Node(1);
+		n2 = new Node(2);
 	}
 	
 	@Test
@@ -49,7 +49,7 @@ class NodeTest {
 	void testEqualsObject() {
 		Node n = n0;
 		Node copy = new Node(n);
-		Node other_n = new Node();
+		Node other_n = new Node(4);
 		
 		assertTrue(n.equals(copy));
 		assertFalse(n.equals(other_n));
@@ -59,9 +59,9 @@ class NodeTest {
 
 	@Test
 	void testNode() {
-		Node n = new Node();
+		Node n = new Node(5);
 		for(int i = n.getKey()+1; i<=50;i++) {
-			Node node = new Node();
+			Node node = new Node(i);
 			assertEquals(i, node.getKey());
 		}
 	}

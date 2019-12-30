@@ -23,8 +23,8 @@ public class DGraph implements graph,Serializable {
 
 	public DGraph(int num) {
 		this();
-		for (int i = 0; i <= num; i++) {
-			node_data new_node = new Node();
+		for (int i = 0; i < num; i++) {
+			node_data new_node = new Node(i);
 			addNode(new_node);
 		}
 	}
@@ -51,6 +51,9 @@ public class DGraph implements graph,Serializable {
 	@Override
 	public void addNode(node_data n) {
 		if(n==null) throw new RuntimeException("Cannot add null Node!");
+		
+		if(nodes.containsKey(n.getKey())) throw new RuntimeException("Node "+n.getKey()+" is already exists!");
+		
 		nodes.put(n.getKey(), n);
 		num_of_nodes++;
 		mode_count++;
@@ -61,7 +64,7 @@ public class DGraph implements graph,Serializable {
 		node_data s = nodes.get(src);
 		node_data d = nodes.get(dest);
 		
-		if(s==null || d == null) throw new RuntimeException("Cannot connect the nodes!");
+		if(s==null || d == null) throw new RuntimeException("Cannot connect the nodes "+src+" and "+ dest);
 		
 		edge_data edge = new Edge(s, d, w);
 		LinkedHashMap<Integer, edge_data> tmp_edge;

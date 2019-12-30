@@ -7,15 +7,12 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
 
 import dataStructure.DGraph;
 import dataStructure.Node;
-import dataStructure.Node_Comparator;
 import dataStructure.edge_data;
 import dataStructure.graph;
 import dataStructure.node_data;
@@ -30,14 +27,10 @@ import dataStructure.node_data;
 public class Graph_Algo implements graph_algorithms {
 
 	private graph g;
-	
-	public Graph_Algo() {
 
-	}
-	
 	@Override
 	public void init(graph g) {
-		this.g = g;
+		this.g = (g != null) ? g : new DGraph();
 	}
 
 	@Override
@@ -88,16 +81,18 @@ public class Graph_Algo implements graph_algorithms {
 
 	@Override
 	public boolean isConnected() {
-		
+
 		for (node_data node_src : g.getV()) {
 			for (node_data node_dest : g.getV()) {
-				
-				if(shortestPath(node_src.getKey(), node_dest.getKey()) == null) return false;
-				if(shortestPath(node_dest.getKey(), node_src.getKey()) == null) return false;
-				
+
+				if (shortestPathDist(node_src.getKey(), node_dest.getKey()) == Double.POSITIVE_INFINITY)
+					return false;
+				if (shortestPathDist(node_dest.getKey(), node_src.getKey()) == Double.POSITIVE_INFINITY)
+					return false;
+
 			}
 		}
-		
+
 		return true;
 	}
 
@@ -105,7 +100,6 @@ public class Graph_Algo implements graph_algorithms {
 	public double shortestPathDist(int src, int dest) {
 		PriorityQueue<node_data> Q = new PriorityQueue<node_data>(Node._Comp);
 		Collection<node_data> nodes = g.getV();
-//		node_data s = g.getNode(src);
 		node_data d = g.getNode(dest);
 
 		for (node_data node : nodes) {
@@ -116,10 +110,9 @@ public class Graph_Algo implements graph_algorithms {
 			Q.add(node);
 		}
 
-		// s.setWeight(0);
-		
-		if(d == null) return Double.POSITIVE_INFINITY;
-		
+		if (d == null)
+			return Double.POSITIVE_INFINITY;
+
 		while (d.getTag() != 1) {
 			node_data u = Q.poll();
 			Collection<edge_data> u_edges = g.getE(u.getKey());
@@ -136,19 +129,6 @@ public class Graph_Algo implements graph_algorithms {
 							while (!Q.isEmpty())
 								tmp.add(Q.poll());
 							Q = tmp;
-
-//							if (path != null) {
-//								ArrayList<node_data> u_path = new ArrayList<node_data>();
-//								if (path.get(v.getKey()) == null) {
-//									u_path.add(u);
-//									if (path.get(u.getKey()) != null) {
-//										u_path.addAll(path.get(u.getKey()));
-//									}
-//									path.put(v.getKey(), u_path);
-//								} else {
-//									path.get(v.getKey()).add(u);
-//								}
-//							}
 						}
 					}
 				}
@@ -160,6 +140,8 @@ public class Graph_Algo implements graph_algorithms {
 
 	@Override
 	public List<node_data> shortestPath(int src, int dest) {
+		if (g.getNode(src) == null || g.getNode(dest) == null)
+			return null;
 		LinkedList<node_data> path = new LinkedList<node_data>();
 		shortestPathDist(src, dest);
 		node_data curr_dest = g.getNode(dest);
@@ -180,12 +162,14 @@ public class Graph_Algo implements graph_algorithms {
 	@Override
 	public List<node_data> TSP(List<Integer> targets) {
 		ArrayList<node_data> ans = new ArrayList<node_data>();
-		for(int i = 1 ; i < targets.size() ; i++) {
-			int src = targets.get(i-1);
+		for (int i = 1; i < targets.size(); i++) {
+			int src = targets.get(i - 1);
 			int dest = targets.get(i);
 			Collection<node_data> path = shortestPath(src, dest);
-			if(path == null) return null;
-			if(ans.size() > 0) ans.remove(ans.size()-1);
+			if (path == null)
+				return null;
+			if (ans.size() > 0)
+				ans.remove(ans.size() - 1);
 			ans.addAll(path);
 		}
 		return ans;
@@ -197,7 +181,7 @@ public class Graph_Algo implements graph_algorithms {
 		if (g != null) {
 			Collection<node_data> nodes = g.getV();
 
-			for (node_data node : nodes) 
+			for (node_data node : nodes)
 				copy.addNode(new Node(node));
 
 			for (node_data node : nodes) {

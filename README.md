@@ -25,7 +25,19 @@ This class represents a directional weighted graph.
  * Connectivity of the graph. 
  * Shortest path between 2 nodes. 
 
-##### Libraries
+### Graph_GUI Class
 
-In this project we used Gson library for reading a json file.  
-[Gson](https://github.com/google/gson)
+This class represents a graph as a User Interface, and allows run algorithms on it.  
+
+Example: 
+![img](https://github.com/alonshlomi/OOP-hw2/blob/master/images/graph.png)
+
+##### Interfaces implemented and Comparator
+
+The interfaces implemented in this assignment: 
+* **node_data**
+* **edge_data**
+* **graph**
+* **graph_algorithms**
+
+**Node_Comparator**: Compare nodes' weight.

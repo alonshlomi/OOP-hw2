@@ -9,11 +9,8 @@ public class Edge implements edge_data, Serializable {
 	private double weight;
 	private int tag;
 	private String info;
-
-	public String toString() {
-		return "[" + src.getKey() + "->" + dest.getKey() + " (" + weight + ")]";
-	}
-
+	
+	//Constructors:
 	public Edge() {}
 	
 	public Edge(node_data src, node_data dest, double weight) {
@@ -24,6 +21,7 @@ public class Edge implements edge_data, Serializable {
 		this.weight = weight;
 	}
 
+	//Getters, Setters and toString:
 	@Override
 	public int getSrc() {
 		return src.getKey();
@@ -59,4 +57,7 @@ public class Edge implements edge_data, Serializable {
 		tag = t;
 	}
 
+	public String toString() {
+		return "[" + src.getKey() + "->" + dest.getKey() + " (" + weight + ")]";
+	}
 }

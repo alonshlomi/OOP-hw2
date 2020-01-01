@@ -10,26 +10,12 @@ public class DGraph implements graph,Serializable {
 	private int num_of_nodes, num_of_edges,mode_count;
 	private LinkedHashMap<Integer, node_data> nodes;
 	private LinkedHashMap<Integer, LinkedHashMap<Integer, edge_data>> edges;
-
-	public String toString() {
-		String ans = "Nodes: "+getV()+"\n";
-		for (node_data node : getV()) {
-			if(node != null)
-			ans += getE(node.getKey())+",";
-		}
-		ans+="\nnodesSize: "+nodeSize()+", edgeSize: "+edgeSize();
-		return ans;
-	}
-
-	public DGraph(int num) {
-		this();
-		for (int i = 0; i < num; i++) {
-			node_data new_node = new Node(i);
-			addNode(new_node);
-		}
-	}
-
+	
+	//Constructors:
 	public DGraph() {
+		/*
+		 * Initialize an empty graph.
+		 */
 		nodes = new LinkedHashMap<Integer, node_data>();
 		edges = new LinkedHashMap<Integer, LinkedHashMap<Integer, edge_data>>();
 		num_of_edges = 0;
@@ -37,6 +23,19 @@ public class DGraph implements graph,Serializable {
 		mode_count = 0;
 	}
 	
+	public DGraph(int num) {
+		/*
+		 * Initialize a graph with given num of nodes.
+		 * The keys are 0,1,...,num-1.
+		 */
+		this();
+		for (int i = 0; i < num; i++) {
+			node_data new_node = new Node(i);
+			addNode(new_node);
+		}
+	}
+	
+	//Methods:
 	@Override
 	public node_data getNode(int key) {
 		return nodes.get(key);
@@ -50,6 +49,10 @@ public class DGraph implements graph,Serializable {
 
 	@Override
 	public void addNode(node_data n) {
+		/*
+		 * Add node to this graph.
+		 * throw exceptions if null or already exists.
+		 */
 		if(n==null) throw new RuntimeException("Cannot add null Node!");
 		
 		if(nodes.containsKey(n.getKey())) throw new RuntimeException("Node "+n.getKey()+" is already exists!");
@@ -63,9 +66,10 @@ public class DGraph implements graph,Serializable {
 	public void connect(int src, int dest, double w) {
 		node_data s = nodes.get(src);
 		node_data d = nodes.get(dest);
-		
-		if(s==null || d == null) throw new RuntimeException("Cannot connect the nodes "+src+" and "+ dest);
-		
+
+		if (s == null || d == null)
+			throw new RuntimeException("Cannot connect the nodes " + src + " and " + dest);
+
 		edge_data edge = new Edge(s, d, w);
 		LinkedHashMap<Integer, edge_data> tmp_edge;
 		if (edges.get(src) == null) {
@@ -93,10 +97,12 @@ public class DGraph implements graph,Serializable {
 
 	@Override
 	public node_data removeNode(int key) {
+		//Remove node's edges:
 		if (edges.get(key) != null)
 			num_of_edges-=edges.get(key).size();
 		edges.remove(key);
 
+		//Search for all edges connected to the node:
 		Collection<LinkedHashMap<Integer, edge_data>> tmp = edges.values();
 		Iterator<LinkedHashMap<Integer, edge_data>> it = tmp.iterator();
 		
@@ -106,7 +112,8 @@ public class DGraph implements graph,Serializable {
 				num_of_edges--;
 			curr.remove(key);
 		}
-
+		
+		//Remove node:
 		if (nodes.get(key) != null)
 			num_of_nodes--;
 		mode_count++;
@@ -114,12 +121,13 @@ public class DGraph implements graph,Serializable {
 	}
 
 	@Override
-	public edge_data removeEdge(int src, int dest) {
-		if(getNode(src) == null || getNode(dest) == null) throw new RuntimeException("No Such Nodes!");
-		if(src == dest) throw new RuntimeException("Invalid Input!");
+	public edge_data removeEdge(int src, int dest) { 
+		if(getNode(src) == null || getNode(dest) == null) return null;
+		if(src == dest) return null;
 		if (edges.get(src) != null && edges.get(src).get(dest) != null)
 			num_of_edges--;
 		mode_count++;
+		if(edges.get(src) == null) return null;
 		return edges.get(src).remove(dest);
 	}
 

@@ -28,6 +28,7 @@ public class Graph_Algo implements graph_algorithms {
 
 	private graph g;
 	
+	//Constructors:
 	public Graph_Algo() {
 	}
 	
@@ -35,14 +36,17 @@ public class Graph_Algo implements graph_algorithms {
 		init(g);
 	}
 	
+	//Methods:
 	@Override
 	public void init(graph g) {
 		this.g = (g != null) ? g : new DGraph();
 	}
-
+	
 	@Override
 	public void init(String file_name) {
-
+		/*
+		 * Yael's code for deserialize:
+		 */
 		g = null;
 
 		try {
@@ -69,7 +73,9 @@ public class Graph_Algo implements graph_algorithms {
 
 	@Override
 	public void save(String file_name) {
-
+		/*
+		 * Yael's code for serialize:
+		 */
 		try {
 			FileOutputStream file = new FileOutputStream(file_name);
 			ObjectOutputStream out = new ObjectOutputStream(file);
@@ -88,7 +94,9 @@ public class Graph_Algo implements graph_algorithms {
 
 	@Override
 	public boolean isConnected() {
-
+		/*
+		 * Check if the graph is strong connected by finding path between every 2 nodes.
+		 */
 		for (node_data node_src : g.getV()) {
 			for (node_data node_dest : g.getV()) {
 
@@ -105,6 +113,10 @@ public class Graph_Algo implements graph_algorithms {
 
 	@Override
 	public double shortestPathDist(int src, int dest) {
+		/*
+		 * Return's the weight that will cost in the shortest path between src and dest.
+		 * In this function we implemented Dijkstra's algorithm.
+		 */
 		PriorityQueue<node_data> Q = new PriorityQueue<node_data>(Node._Comp);
 		Collection<node_data> nodes = g.getV();
 		node_data d = g.getNode(dest);
@@ -147,6 +159,10 @@ public class Graph_Algo implements graph_algorithms {
 
 	@Override
 	public List<node_data> shortestPath(int src, int dest) {
+		/*
+		 * Return's list of nodes of the shortest path between src and dest.
+		 * In this function we were helped by shortestPathDist function.
+		 */
 		if (g.getNode(src) == null || g.getNode(dest) == null)
 			return null;
 		LinkedList<node_data> path = new LinkedList<node_data>();
@@ -168,6 +184,9 @@ public class Graph_Algo implements graph_algorithms {
 
 	@Override
 	public List<node_data> TSP(List<Integer> targets) {
+		/*
+		 * Return's a list which represents a path that going over all nodes in targets.
+		 */
 		ArrayList<node_data> ans = new ArrayList<node_data>();
 		for (int i = 1; i < targets.size(); i++) {
 			int src = targets.get(i - 1);
@@ -184,6 +203,10 @@ public class Graph_Algo implements graph_algorithms {
 
 	@Override
 	public graph copy() {
+		/*
+		 * Return's a graph object with deep copy of our graph.
+		 * In this function we deep-copied the Nodes and Edges.
+		 */
 		graph copy = new DGraph();
 		if (g != null) {
 			Collection<node_data> nodes = g.getV();

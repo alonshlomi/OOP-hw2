@@ -10,8 +10,8 @@ public class Node implements node_data, Serializable {
 	private Point3D location;
 	private double weight;
 	private String info;
-
-	public static final Node_Comparator _Comp = new Node_Comparator();
+	
+	public static final Node_Comparator _Comp = new Node_Comparator(); //Compare by weight.
 	
 	public Node() {}
 	
@@ -30,9 +30,13 @@ public class Node implements node_data, Serializable {
 		info = (other.getInfo() == null) ? null : new String(other.getInfo());
 		tag = other.getTag();
 	}
-
+	
+	//Methods, Getters and Setters:
 	@Override
 	public boolean equals(Object o) {
+		/*
+		 * Return's true if and only if the keys are equal
+		 */
 		if (o instanceof node_data) {
 			node_data other = (node_data) o;
 			return this.key == other.getKey();

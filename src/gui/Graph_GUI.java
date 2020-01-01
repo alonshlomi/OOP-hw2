@@ -36,8 +36,10 @@ public class Graph_GUI extends JFrame implements MouseListener {
 	private graph g;
 	private Graph_Algo algo;
 	private int curr_mc;
-
+	
+	//Constructors:
 	public Graph_GUI() {
+		//Initialize an empty graph and painting.
 		g = new DGraph();
 		curr_mc = g.getMC();
 		algo = new Graph_Algo();
@@ -46,20 +48,25 @@ public class Graph_GUI extends JFrame implements MouseListener {
 	}
 
 	public Graph_GUI(graph g) {
+		//Initialize a given graph and painting.
 		this.g = g;
 		curr_mc = g.getMC();
 		algo = new Graph_Algo();
 		algo.init(g);
 		initGUI();
 	}
-
+	
+	//Methods:
 	private void initGUI() {
+		//Initialize a 1000x800 window:
 		int width = 1000, height = 800;
 		this.setRandLocations(width, height);
 		this.setTitle("Graph GUI");
 		this.setBounds(200, 0, width, height);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			
+		//
+		
+		//Label of nodes and edges size:
 		JPanel p = new JPanel();
 		JLabel stats_lbl = new JLabel("Nodes: "+this.g.nodeSize()+", Edges: "+this.g.edgeSize());
 		stats_lbl.setFont(new Font("Arial",Font.BOLD,15));
@@ -67,7 +74,9 @@ public class Graph_GUI extends JFrame implements MouseListener {
 		stats_lbl.setBounds(0, 0, 2000, 20);
 		p.add(stats_lbl);
 		p.setLayout(null);
-
+		//
+		
+		//Menu bar items:
 		MenuBar menu_bar = new MenuBar();
 
 		Menu file_menu = new Menu("File");
@@ -83,7 +92,8 @@ public class Graph_GUI extends JFrame implements MouseListener {
 		MenuItem ic_item = new MenuItem("IsConnected");
 		MenuItem sp_item = new MenuItem("Shortest Path");
 		MenuItem tsp_item = new MenuItem("TSP");
-
+		
+		//Menu bar actions:
 		save_item.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -147,7 +157,9 @@ public class Graph_GUI extends JFrame implements MouseListener {
 		menu_bar.add(file_menu);
 		menu_bar.add(graph_menu);
 		menu_bar.add(algo_menu);
-
+		//
+		
+		//Repaint if graph was modified:
 		Thread t = new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -164,7 +176,8 @@ public class Graph_GUI extends JFrame implements MouseListener {
 		});
 
 		t.start();
-
+		//
+		
 		this.setMenuBar(menu_bar);
 		this.setVisible(true);
 		this.add(p);
@@ -172,6 +185,7 @@ public class Graph_GUI extends JFrame implements MouseListener {
 	}
 
 	public void addEdgeGUI() {
+		//Init window and components:
 		JFrame frame = new JFrame("Add Edge");
 		JLabel src_lbl = new JLabel("src:  ");
 		JLabel dest_lbl = new JLabel("dest: ");
@@ -191,7 +205,11 @@ public class Graph_GUI extends JFrame implements MouseListener {
 		frame.add(w_lbl);
 		frame.add(w_text);
 		frame.add(btn);
-
+		
+		/*
+		 * Connect edge and repaint when pushing the button:
+		 * Pop a message if an error has been occurred
+		 */
 		btn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -212,6 +230,7 @@ public class Graph_GUI extends JFrame implements MouseListener {
 	}
 
 	public void removeEdgeGUI() {
+		//Init window and components:
 		JFrame frame = new JFrame("Remove Edge");
 		JLabel src_lbl = new JLabel("src:  ");
 		JLabel dest_lbl = new JLabel("dest: ");
@@ -227,18 +246,25 @@ public class Graph_GUI extends JFrame implements MouseListener {
 		frame.add(dest_lbl);
 		frame.add(dest_text);
 		frame.add(btn);
-
+		
+		/*
+		 * Remove edge and repaint when pushing the button:
+		 * Pop a message if an error has been occurred
+		 */
 		btn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
 					int src = Integer.parseInt(src_text.getText());
 					int dest = Integer.parseInt(dest_text.getText());
-					g.removeEdge(src, dest);
+					if(g.removeEdge(src, dest) != null) {
 					repaint();
 					JOptionPane.showMessageDialog(frame, "Edge has been removed", "Remove Edge",
 							JOptionPane.INFORMATION_MESSAGE);
 					frame.setVisible(false);
+					} else {
+						JOptionPane.showMessageDialog(frame, "No such edge!", "Remove Edge", JOptionPane.ERROR_MESSAGE);
+					}
 				} catch (Exception e1) {
 					JOptionPane.showMessageDialog(frame, e1.getMessage(), "Remove Edge", JOptionPane.ERROR_MESSAGE);
 				}
@@ -247,6 +273,7 @@ public class Graph_GUI extends JFrame implements MouseListener {
 	}
 
 	public void removeNodeGUI() {
+		//Init window and components:
 		JFrame frame = new JFrame("Remove Node");
 		JLabel node_lbl = new JLabel("Node to remove: ");
 		JTextField node_text = new JTextField(5);
@@ -259,6 +286,10 @@ public class Graph_GUI extends JFrame implements MouseListener {
 		frame.add(node_text);
 		frame.add(btn);
 
+		/*
+		 * Remove node and repaint when pushing the button:
+		 * Pop a message if an error has been occurred
+		 */
 		btn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -280,18 +311,22 @@ public class Graph_GUI extends JFrame implements MouseListener {
 	}
 
 	private void isConnectedGUI() {
-		String messege;
+		/*
+		 * Pop a message whether the graph is connected or not
+		 */
+		String message;
 
 		if (algo.isConnected()) {
-			messege = "The graph is connected!";
+			message = "The graph is connected!";
 		} else {
-			messege = "The graph isn't connected!";
+			message = "The graph isn't connected!";
 		}
 
-		JOptionPane.showMessageDialog(this, messege, "IsConnected", JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(this, message, "IsConnected", JOptionPane.INFORMATION_MESSAGE);
 	}
 
 	private void shortestPathGUI() {
+		//Init window and components:
 		JFrame frame = new JFrame("Shortest Path");
 		JLabel src_lbl = new JLabel("src:  ");
 		JLabel dest_lbl = new JLabel("dest: ");
@@ -307,7 +342,11 @@ public class Graph_GUI extends JFrame implements MouseListener {
 		frame.add(dest_lbl);
 		frame.add(dest_text);
 		frame.add(btn);
-
+		
+		/*
+		 * Pop a message with the shortest path weight and list, by given src and dest.
+		 * Pop a message if an error has been occurred
+		 */
 		btn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -318,20 +357,20 @@ public class Graph_GUI extends JFrame implements MouseListener {
 					double ans = algo.shortestPathDist(src, dest);
 					List<node_data> list_ans = algo.shortestPath(src, dest);
 
-					String messege;
+					String message;
 
 					if (list_ans == null) {
-						messege = "No Path!";
+						message = "No Path!";
 					} else {
-						messege = "Shortest path is: " + ans + "\n";
+						message = "Shortest path is: " + ans + "\n";
 						for (int i = 0; i < list_ans.size(); i++) {
-							messege += list_ans.get(i).getKey() + "";
+							message += list_ans.get(i).getKey() + "";
 							if (i != list_ans.size() - 1)
-								messege += "->";
+								message += "->";
 						}
 					}
 
-					JOptionPane.showMessageDialog(frame, messege, "Shortest Path", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(frame, message, "Shortest Path", JOptionPane.INFORMATION_MESSAGE);
 					frame.setVisible(false);
 				} catch (Exception e1) {
 					JOptionPane.showMessageDialog(frame, e1.getMessage(), "Shortest Path", JOptionPane.ERROR_MESSAGE);
@@ -342,6 +381,7 @@ public class Graph_GUI extends JFrame implements MouseListener {
 	}
 
 	private void tspGUI() {
+		//Init window and components:
 		JFrame frame = new JFrame("TSP");
 		JLabel lbl = new JLabel("Insert integers: (seperated by space)");
 		JTextArea integers = new JTextArea(20, 20);
@@ -354,28 +394,33 @@ public class Graph_GUI extends JFrame implements MouseListener {
 		frame.add(integers);
 		frame.add(btn);
 
+		/*
+		 * Pop a message with the path list, by given targets seperated by space.
+		 * Pop a message if an error has been occurred
+		 */
 		btn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
 					ArrayList<Integer> int_list = new ArrayList<Integer>();
+					//Splitting by space and inserting to a list of targets:
 					String[] input = integers.getText().split(" ");
 					for (int i = 0; i < input.length; i++) {
 						int curr_int = Integer.parseInt(input[i]);
 						int_list.add(curr_int);
 					}
-					String messege = "";
+					String message = "";
 					List<node_data> ans = algo.TSP(int_list);
 					if (ans == null) {
 						JOptionPane.showMessageDialog(frame, "No Path!", "TSP", JOptionPane.ERROR_MESSAGE);
 					} else {
-						messege += "The path is: \n";
+						message += "The path is: \n";
 						for (int i = 0; i < ans.size(); i++) {
-							messege += ans.get(i).getKey() + "";
+							message += ans.get(i).getKey() + "";
 							if (i != ans.size() - 1)
-								messege += "->";
+								message += "->";
 						}
-						JOptionPane.showMessageDialog(frame, messege, "TSP", JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(frame, message, "TSP", JOptionPane.INFORMATION_MESSAGE);
 						frame.setVisible(false);
 					}
 
@@ -386,6 +431,7 @@ public class Graph_GUI extends JFrame implements MouseListener {
 		});
 	}
 
+	//Elizabeth's code:
 	public void writeFileDialog() {
 		FileDialog fd = new FileDialog(this, "Save Graph", FileDialog.SAVE);
 		fd.setFilenameFilter(new FilenameFilter() {
@@ -403,7 +449,8 @@ public class Graph_GUI extends JFrame implements MouseListener {
 			algo.save(folder + fileName);
 		}
 	}
-
+	
+	//Elizabeth's code:
 	public void readFileDialog() {
 
 		FileDialog fd = new FileDialog(this, "Load Graph", FileDialog.LOAD);
@@ -473,7 +520,9 @@ public class Graph_GUI extends JFrame implements MouseListener {
 	}
 
 	public void setRandLocations(int height, int width) {
-
+		/*
+		 * Set random location on a height x width window.
+		 */
 		for (node_data node : g.getV()) {
 			double x = Math.random() * (width);
 			double y = Math.random() * (height / 1.5);
@@ -494,6 +543,10 @@ public class Graph_GUI extends JFrame implements MouseListener {
 
 	@Override
 	public void mousePressed(MouseEvent e) {
+		/*
+		 * Pop a message when mouse is pressed, for adding a new node.
+		 * Add the node to the location pressed and repaint.
+		 */
 		try {
 		Point3D loc = new Point3D(e.getX(), e.getY());
 		String new_node = JOptionPane.showInputDialog(this, "Enter node key: ");

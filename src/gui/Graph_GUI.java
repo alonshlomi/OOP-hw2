@@ -444,7 +444,6 @@ public class Graph_GUI extends JFrame implements MouseListener {
 		fd.setVisible(true);
 		String folder = fd.getDirectory();
 		String fileName = fd.getFile();
-		System.out.println(folder + fileName);
 		if (folder != null && fileName != null) {
 			algo.save(folder + fileName);
 		}

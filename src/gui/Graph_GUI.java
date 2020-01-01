@@ -184,7 +184,7 @@ public class Graph_GUI extends JFrame implements MouseListener {
 		this.addMouseListener(this);
 	}
 
-	public void addEdgeGUI() {
+	private void addEdgeGUI() {
 		//Init window and components:
 		JFrame frame = new JFrame("Add Edge");
 		JLabel src_lbl = new JLabel("src:  ");
@@ -229,7 +229,7 @@ public class Graph_GUI extends JFrame implements MouseListener {
 		});
 	}
 
-	public void removeEdgeGUI() {
+	private void removeEdgeGUI() {
 		//Init window and components:
 		JFrame frame = new JFrame("Remove Edge");
 		JLabel src_lbl = new JLabel("src:  ");
@@ -272,7 +272,7 @@ public class Graph_GUI extends JFrame implements MouseListener {
 		});
 	}
 
-	public void removeNodeGUI() {
+	private void removeNodeGUI() {
 		//Init window and components:
 		JFrame frame = new JFrame("Remove Node");
 		JLabel node_lbl = new JLabel("Node to remove: ");
@@ -432,7 +432,7 @@ public class Graph_GUI extends JFrame implements MouseListener {
 	}
 
 	//Elizabeth's code:
-	public void writeFileDialog() {
+	private void writeFileDialog() {
 		FileDialog fd = new FileDialog(this, "Save Graph", FileDialog.SAVE);
 		fd.setFilenameFilter(new FilenameFilter() {
 			@Override
@@ -450,7 +450,7 @@ public class Graph_GUI extends JFrame implements MouseListener {
 	}
 	
 	//Elizabeth's code:
-	public void readFileDialog() {
+	private void readFileDialog() {
 
 		FileDialog fd = new FileDialog(this, "Load Graph", FileDialog.LOAD);
 		fd.setFilenameFilter(new FilenameFilter() {
@@ -518,7 +518,7 @@ public class Graph_GUI extends JFrame implements MouseListener {
 
 	}
 
-	public void setRandLocations(int height, int width) {
+	private void setRandLocations(int height, int width) {
 		/*
 		 * Set random location on a height x width window.
 		 */

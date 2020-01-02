@@ -77,6 +77,9 @@ public class DGraph implements graph,Serializable {
 		} else {
 			tmp_edge = edges.get(src);
 		}
+		if(tmp_edge.get(dest) != null) {
+			num_of_edges--;
+		}
 		tmp_edge.put(dest, edge);
 		edges.put(src, tmp_edge);
 		num_of_edges++;

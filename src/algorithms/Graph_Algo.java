@@ -188,6 +188,7 @@ public class Graph_Algo implements graph_algorithms {
 		 * Return's a list which represents a path that going over all nodes in targets.
 		 */
 		ArrayList<node_data> ans = new ArrayList<node_data>();
+		if(targets.size() == 1) return null;
 		for (int i = 1; i < targets.size(); i++) {
 			int src = targets.get(i - 1);
 			int dest = targets.get(i);
